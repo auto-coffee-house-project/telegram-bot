@@ -4,8 +4,7 @@ from aiogram.filters import StateFilter, invert_f
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-from callback_data import code_input_filter
-from filters import salesman_filter
+from filters import salesman_filter, code_input_filter
 from models import Salesman
 from repositories.sales import SaleRepository
 from states import SaleTemporaryCodeStates

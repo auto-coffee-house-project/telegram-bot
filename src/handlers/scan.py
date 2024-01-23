@@ -2,8 +2,7 @@ from aiogram import Router, F
 from aiogram.filters import StateFilter
 from aiogram.types import Message
 
-from callback_data import code_deeplink_filter
-from filters import salesman_filter
+from filters import salesman_filter, code_deeplink_filter
 from models import Salesman
 from repositories import SaleRepository
 from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
