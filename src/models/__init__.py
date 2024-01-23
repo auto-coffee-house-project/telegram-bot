@@ -1,3 +1,4 @@
+from .bots import *
 from .clients import *
 from .responses import *
 from .sale_groups import *
