@@ -6,7 +6,7 @@ from aiogram.types import Message
 
 from filters import salesman_filter, code_input_filter
 from models import Salesman
-from repositories.sales import SaleRepository
+from repositories import SaleRepository
 from states import SaleTemporaryCodeStates
 from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
 
