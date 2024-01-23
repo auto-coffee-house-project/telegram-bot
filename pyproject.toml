@@ -8,6 +8,8 @@ packages = [{include = "coffee_house_telegram_bot"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+aiogram = "^3.3.0"
+httpx = "^0.26.0"
 
 
 [build-system]
