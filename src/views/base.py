@@ -55,6 +55,6 @@ async def answer_view(message: Message, view: TextView) -> Message:
 
 async def answer_photo_view(message: Message, view: PhotoView) -> Message:
     return await message.answer_photo(
-        photo=view.photo,
-        caption=view.caption,
+        photo=view.get_photo(),
+        caption=view.get_caption(),
     )
