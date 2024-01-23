@@ -62,7 +62,7 @@ async def main() -> None:
         bot_repository = BotRepository(http_client)
         bots = await bot_repository.get_all()
 
-    bots = [Bot(token=bot['token'], parse_mode=ParseMode.HTML) for bot in bots]
+    bots = [Bot(token=bot.token, parse_mode=ParseMode.HTML) for bot in bots]
 
     await setup_web_app_menu_buttons(
         bots=bots,
