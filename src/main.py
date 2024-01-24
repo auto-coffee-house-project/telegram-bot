@@ -14,6 +14,7 @@ from config import load_config_from_file
 from middlewares import (
     APIRepositoriesInitializerMiddleware,
     HttpClientInitializerMiddleware,
+    user_middleware,
 )
 from repositories import (
     BotRepository,
@@ -31,6 +32,7 @@ def register_routers(dispatcher: Dispatcher) -> None:
         handlers.scan.router,
         handlers.start.router,
         handlers.code_input.router,
+        handlers.admins.router,
         handlers.errors.router,
     )
 
@@ -86,6 +88,7 @@ async def main() -> None:
             admin_repository=AdminRepository,
         ),
     )
+    dispatcher.update.outer_middleware(user_middleware)
 
     await dispatcher.start_polling(*bots)
 
