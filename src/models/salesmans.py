@@ -1,8 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 __all__ = ('Salesman',)
 
 
 class Salesman(BaseModel):
     id: int
-    user_id: int = Field(alias='user')
+    user_id: int
