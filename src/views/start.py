@@ -1,12 +1,21 @@
-from aiogram.types import (
-    ReplyKeyboardMarkup,
-    KeyboardButton,
-)
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from views import TextView
 from views.base import PhotoView
 
-__all__ = ('StartClientView', 'StartSalesmanView')
+__all__ = ('StartClientView', 'StartSalesmanView', 'StartAdminView')
+
+
+class StartAdminView(TextView):
+    text = 'Привет ✋'
+    reply_markup = ReplyKeyboardMarkup(
+        resize_keyboard=True,
+        keyboard=[
+            [
+                KeyboardButton(text='🔗 Ссылка-приглашение'),
+            ],
+        ],
+    )
 
 
 class StartClientView(PhotoView):
