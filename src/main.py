@@ -29,6 +29,7 @@ def register_routers(dispatcher: Dispatcher) -> None:
         handlers.scan.router,
         handlers.start.router,
         handlers.code_input.router,
+        handlers.errors.router,
     )
 
 
