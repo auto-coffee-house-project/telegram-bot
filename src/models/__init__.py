@@ -1,5 +1,6 @@
 from .bots import *
 from .clients import *
+from .invitations import *
 from .responses import *
 from .sale_groups import *
 from .sales import *
