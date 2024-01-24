@@ -19,7 +19,7 @@ from repositories import (
     BotRepository,
     UserRepository,
     SalesmanRepository,
-    ShopGroupRepository,
+    ShopGroupRepository, InvitationRepository,
 )
 from repositories.sales import SaleRepository
 
@@ -80,6 +80,7 @@ async def main() -> None:
             salesman_repository=SalesmanRepository,
             user_repository=UserRepository,
             shop_group_repository=ShopGroupRepository,
+            invitation_repository=InvitationRepository,
         ),
     )
 
