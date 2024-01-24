@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.filters import StateFilter
+from aiogram.filters import StateFilter, invert_f
 from aiogram.types import Message
 
 from filters import salesman_filter, code_deeplink_filter
@@ -28,3 +28,12 @@ async def on_scan_qr_code(
     )
     view = SaleTemporaryCodeSuccessfullyAppliedView(sale)
     await answer_view(message, view)
+
+
+@router.message(
+    F.text,
+    code_deeplink_filter,
+    StateFilter('*'),
+)
+async def on_qr_code_scanned_by_non_salesman(message: Message) -> None:
+    await message.answer('❌ Вы не являетесь продавцом')
