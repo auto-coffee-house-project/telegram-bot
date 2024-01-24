@@ -1,5 +1,6 @@
 from aiogram.types import Message
 
+from exceptions import SalesmanDoesNotExistError
 from repositories import SalesmanRepository
 
 __all__ = ('salesman_filter',)
@@ -12,6 +13,6 @@ async def salesman_filter(
     user_id = message.from_user.id
     try:
         salesman = await salesman_repository.get_by_user_id(user_id)
-    except Exception:
+    except SalesmanDoesNotExistError:
         return False
     return {'salesman': salesman}
