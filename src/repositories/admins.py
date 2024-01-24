@@ -9,7 +9,7 @@ __all__ = ('AdminRepository',)
 class AdminRepository(APIRepository):
 
     async def get_by_user_id(self, user_id: int) -> Admin:
-        url = f'/admins/{user_id}/'
+        url = f'/shops/admins/{user_id}/'
         response = await self._http_client.get(url)
         api_response = parse_api_response(response)
 
