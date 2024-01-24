@@ -2,13 +2,13 @@ from aiogram import Router, Bot
 from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import Message
 
-from filters import salesman_filter
+from filters import salesman_filter, admin_filter
 from repositories import ShopGroupRepository
 from views import (
     StartClientView,
     answer_photo_view,
     StartSalesmanView,
-    answer_view,
+    answer_view, StartAdminView,
 )
 
 __all__ = ('router',)
@@ -25,6 +25,18 @@ async def on_start_salesman(
         message: Message,
 ) -> None:
     view = StartSalesmanView()
+    await answer_view(message, view)
+
+
+@router.message(
+    CommandStart(),
+    admin_filter,
+    StateFilter('*'),
+)
+async def on_start_admin(
+        message: Message,
+) -> None:
+    view = StartAdminView()
     await answer_view(message, view)
 
 

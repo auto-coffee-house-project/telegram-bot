@@ -29,7 +29,7 @@ async def on_ask_for_sale_temporary_code(
 @router.message(
     F.chat.type == ChatType.PRIVATE,
     invert_f(code_input_filter),
-    StateFilter('*'),
+    StateFilter(SaleTemporaryCodeStates.code),
 )
 async def on_sale_temporary_code_invalid_input(
         message: Message,
