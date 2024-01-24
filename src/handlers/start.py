@@ -3,11 +3,12 @@ from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import Message
 
 from filters import salesman_filter
-from models import Salesman
 from repositories import ShopGroupRepository
 from views import (
-    StartClientView, answer_photo_view, StartSalesmanView,
-    answer_view
+    StartClientView,
+    answer_photo_view,
+    StartSalesmanView,
+    answer_view,
 )
 
 __all__ = ('router',)
