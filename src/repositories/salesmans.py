@@ -17,7 +17,7 @@ class SalesmanRepository(APIRepository):
         if api_response.ok:
             return Salesman.model_validate(api_response.result)
 
-        if api_response.message == 'Does not exists':
+        if api_response.message == 'Does not exist':
             raise SalesmanDoesNotExistError(salesman_user_id=user_id)
 
         raise ServerAPIError(response)
