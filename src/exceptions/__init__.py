@@ -1,3 +1,4 @@
+from .admins import *
 from .bots import *
 from .parsers import *
 from .salesmans import *
