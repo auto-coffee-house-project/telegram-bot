@@ -23,6 +23,7 @@ from repositories import (
     ShopGroupRepository,
     InvitationRepository,
     AdminRepository,
+    MailingRepository,
 )
 from repositories.sales import SaleRepository
 
@@ -86,6 +87,7 @@ async def main() -> None:
             shop_group_repository=ShopGroupRepository,
             invitation_repository=InvitationRepository,
             admin_repository=AdminRepository,
+            mailing_repository=MailingRepository,
         ),
     )
     dispatcher.update.outer_middleware(user_middleware)

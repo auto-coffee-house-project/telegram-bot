@@ -14,6 +14,9 @@ class StartAdminView(TextView):
             [
                 KeyboardButton(text='🔗 Ссылка-приглашение'),
             ],
+            [
+                KeyboardButton(text='📨 Рассылка'),
+            ]
         ],
     )
 
