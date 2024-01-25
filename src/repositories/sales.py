@@ -1,6 +1,6 @@
 from exceptions import (
     ServerAPIError, SalesmanDoesNotExistError,
-    SalesmanAndSaleCodeShopGroupsNotEqualError
+    SalesmanAndSaleCodeShopGroupsNotEqualError, SaleDeletionTimeExpiredError
 )
 from exceptions.codes import CodeDoesNotExistError, CodeExpiredError
 from models import Sale
@@ -41,5 +41,19 @@ class SaleRepository(APIRepository):
                 salesman_user_id=salesman_user_id,
                 code=code,
             )
+
+        raise ServerAPIError(response)
+
+    async def delete(self, sale_id: int) -> None:
+        url = f'/shops/sales/{sale_id}/'
+        response = await self._http_client.delete(url)
+
+        api_response = parse_api_response(response)
+
+        if api_response.ok:
+            return
+
+        if api_response.message == 'Sale deletion time expired':
+            raise SaleDeletionTimeExpiredError
 
         raise ServerAPIError(response)
