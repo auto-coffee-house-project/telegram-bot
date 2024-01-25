@@ -1,1 +1,1 @@
-from . import start, scan, code_input, errors, admins
+from . import start, codes, errors, admins

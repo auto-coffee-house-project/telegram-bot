@@ -4,12 +4,13 @@ from aiogram.filters import StateFilter, invert_f
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-from enums import UserRole
-from filters import salesman_filter, code_input_filter, user_is_salesman_filter
-from models import Salesman, User
+from filters import code_input_filter, user_is_salesman_filter
+from models import User
 from repositories import SaleRepository
 from states import SaleTemporaryCodeStates
 from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
+
+__all__ = ('router',)
 
 router = Router(name=__name__)
 
