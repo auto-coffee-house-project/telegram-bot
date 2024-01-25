@@ -10,7 +10,9 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import MenuButtonWebApp, WebAppInfo
 
 import handlers
+import models
 from config import load_config_from_file
+from logger import setup_config
 from middlewares import (
     APIRepositoriesInitializerMiddleware,
     HttpClientInitializerMiddleware,
@@ -40,20 +42,26 @@ def register_routers(dispatcher: Dispatcher) -> None:
 
 async def setup_web_app_menu_buttons(
         *,
-        bots: Iterable[Bot],
+        bots: Iterable[models.Bot],
         web_app_url: str,
 ) -> None:
-    menu_button = MenuButtonWebApp(
-        text='Get Coffee',
-        web_app=WebAppInfo(url=web_app_url),
-    )
     for bot in bots:
+        url = f'{web_app_url.rstrip("/")}?botId={bot.id}&botUsername={bot.username}'
+        bot = Bot(token=bot.token)
+        menu_button = MenuButtonWebApp(
+            text='Get Coffee',
+            web_app=WebAppInfo(url=url),
+        )
         await bot.set_chat_menu_button(menu_button=menu_button)
 
 
 async def main() -> None:
-    config_file_path = pathlib.Path(__file__).parent.parent / 'config.toml'
+    root_path = pathlib.Path(__file__).parent.parent
+    config_file_path = root_path / 'config.toml'
     config = load_config_from_file(config_file_path)
+
+    logging_config_file_path = root_path / 'logging.json'
+    setup_config(logging_config_file_path)
 
     dispatcher = Dispatcher(storage=MemoryStorage())
 
@@ -68,12 +76,11 @@ async def main() -> None:
         bot_repository = BotRepository(http_client)
         bots = await bot_repository.get_all()
 
-    bots = [Bot(token=bot.token, parse_mode=ParseMode.HTML) for bot in bots]
-
     await setup_web_app_menu_buttons(
         bots=bots,
         web_app_url=config.web_app_url,
     )
+    bots = [Bot(token=bot.token, parse_mode=ParseMode.HTML) for bot in bots]
 
     dispatcher.update.outer_middleware(
         HttpClientInitializerMiddleware(http_client_factory),
