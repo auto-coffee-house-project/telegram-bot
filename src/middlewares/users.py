@@ -13,5 +13,6 @@ async def user_middleware(
     if message_or_callback_query is not None:
         user = message_or_callback_query.from_user
         user_repository: UserRepository = data['user_repository']
-        await user_repository.upsert_user(user)
+        user = await user_repository.upsert_user(user)
+        data['user'] = user
     return await handler(event, data)

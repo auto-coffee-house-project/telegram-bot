@@ -38,6 +38,9 @@
         "file"
       ],
       "level": "INFO"
+    },
+    "aiogram.dispatcher": {
+      "level": "WARNING"
     }
   }
 }

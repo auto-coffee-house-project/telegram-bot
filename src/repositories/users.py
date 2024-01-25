@@ -26,3 +26,14 @@ class UserRepository(APIRepository):
             return User.model_validate(api_response.result)
 
         raise ServerAPIError(response)
+
+    async def get_user_by_id(self, user_id: int) -> User:
+        url = f'/telegram/users/{user_id}/'
+        response = await self._http_client.get(url)
+
+        api_response = parse_api_response(response)
+
+        if api_response.ok:
+            return User.model_validate(api_response.result)
+
+        raise ServerAPIError(response)

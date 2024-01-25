@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from exceptions import AdminDoesNotExistError
-from filters import admin_filter
+from filters import user_is_admin_filter
 from repositories import InvitationRepository, MailingRepository
 from states import ShopMailingStates
 from views import answer_view, MailingConfirmView, InvitationView
@@ -16,6 +16,7 @@ router = Router(name=__name__)
 
 @router.message(
     F.text == '🔗 Ссылка-приглашение',
+    user_is_admin_filter,
     StateFilter('*'),
 )
 async def on_create_invitation(
@@ -35,7 +36,7 @@ async def on_create_invitation(
 
 @router.message(
     F.text == '📨 Рассылка',
-    admin_filter,
+    user_is_admin_filter,
     StateFilter('*'),
 )
 async def on_start_mailing(
@@ -48,6 +49,7 @@ async def on_start_mailing(
 
 @router.message(
     F.text,
+    user_is_admin_filter,
     StateFilter(ShopMailingStates.text),
 )
 async def on_mailing_message_input(
@@ -62,6 +64,7 @@ async def on_mailing_message_input(
 
 @router.callback_query(
     F.data == 'mailing-confirm',
+    user_is_admin_filter,
     StateFilter(ShopMailingStates.confirm),
 )
 async def on_mailing_confirm(

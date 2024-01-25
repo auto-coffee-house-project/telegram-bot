@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from enums import UserRole
+
 __all__ = ('User',)
 
 
@@ -11,3 +13,4 @@ class User(BaseModel):
     last_name: str | None
     username: str | None
     created_at: datetime
+    role: UserRole

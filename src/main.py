@@ -60,7 +60,7 @@ async def main() -> None:
     config_file_path = root_path / 'config.toml'
     config = load_config_from_file(config_file_path)
 
-    logging_config_file_path = root_path / 'logging.json'
+    logging_config_file_path = root_path / 'logging_config.json'
     setup_config(logging_config_file_path)
 
     dispatcher = Dispatcher(storage=MemoryStorage())

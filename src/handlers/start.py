@@ -2,7 +2,10 @@ from aiogram import Router, Bot
 from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import Message
 
-from filters import salesman_filter, admin_filter
+from filters import (
+    user_is_salesman_filter, user_is_admin_filter,
+    user_is_client_filter
+)
 from repositories import ShopGroupRepository
 from views import (
     StartClientView,
@@ -18,7 +21,7 @@ router = Router(name=__name__)
 
 @router.message(
     CommandStart(),
-    salesman_filter,
+    user_is_salesman_filter,
     StateFilter('*'),
 )
 async def on_start_salesman(
@@ -30,7 +33,7 @@ async def on_start_salesman(
 
 @router.message(
     CommandStart(),
-    admin_filter,
+    user_is_admin_filter,
     StateFilter('*'),
 )
 async def on_start_admin(
@@ -40,7 +43,11 @@ async def on_start_admin(
     await answer_view(message, view)
 
 
-@router.message(CommandStart(), StateFilter('*'))
+@router.message(
+    CommandStart(),
+    user_is_client_filter,
+    StateFilter('*'),
+)
 async def on_start_client(
         message: Message,
         bot: Bot,
