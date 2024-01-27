@@ -38,12 +38,16 @@ class TextView:
 class PhotoView:
     caption: str | None = None
     photo: str
+    reply_markup: ReplyMarkup | None = None
 
     def get_caption(self) -> str | None:
         return self.caption
 
     def get_photo(self) -> str:
         return self.photo
+
+    def get_reply_markup(self) -> ReplyMarkup | None:
+        return self.reply_markup
 
 
 async def answer_view(message: Message, view: TextView) -> Message:
@@ -57,4 +61,5 @@ async def answer_photo_view(message: Message, view: PhotoView) -> Message:
     return await message.answer_photo(
         photo=view.get_photo(),
         caption=view.get_caption(),
+        reply_markup=view.get_reply_markup(),
     )
