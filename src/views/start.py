@@ -1,4 +1,7 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import (
+    ReplyKeyboardMarkup, KeyboardButton,
+    ReplyKeyboardRemove
+)
 
 from views import TextView
 from views.base import PhotoView
@@ -23,6 +26,7 @@ class StartAdminView(TextView):
 
 class StartClientView(PhotoView):
     photo = 'https://i.imgur.com/OW5KCUN.jpg'
+    reply_markup = ReplyKeyboardRemove()
 
     def __init__(self, each_nth_cup_free: int):
         self.__each_nth_cup_free = each_nth_cup_free
