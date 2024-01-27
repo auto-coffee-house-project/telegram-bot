@@ -1,8 +1,12 @@
 from aiogram import Router, F
-from aiogram.filters import StateFilter
+from aiogram.filters import StateFilter, or_f
 from aiogram.types import Message
 
-from filters import code_deeplink_filter, user_is_salesman_filter
+from filters import (
+    code_deeplink_filter,
+    user_is_salesman_filter,
+    user_is_admin_filter,
+)
 from repositories import SaleRepository
 from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
 
@@ -14,7 +18,10 @@ router = Router(name=__name__)
 @router.message(
     F.text,
     code_deeplink_filter,
-    user_is_salesman_filter,
+    or_f(
+        user_is_salesman_filter,
+        user_is_admin_filter,
+    ),
     StateFilter('*'),
 )
 async def on_scan_qr_code(

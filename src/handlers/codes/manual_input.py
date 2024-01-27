@@ -1,10 +1,13 @@
 from aiogram import Router, F
 from aiogram.enums import ChatType
-from aiogram.filters import StateFilter, invert_f
+from aiogram.filters import StateFilter, invert_f, or_f
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-from filters import code_input_filter, user_is_salesman_filter
+from filters import (
+    code_input_filter, user_is_salesman_filter,
+    user_is_admin_filter
+)
 from models import User
 from repositories import SaleRepository
 from states import SaleTemporaryCodeStates
@@ -18,7 +21,10 @@ router = Router(name=__name__)
 @router.message(
     F.chat.type == ChatType.PRIVATE,
     F.text == '📲 Ввести код вручную',
-    user_is_salesman_filter,
+    or_f(
+        user_is_salesman_filter,
+        user_is_admin_filter,
+    ),
     StateFilter('*'),
 )
 async def on_ask_for_sale_temporary_code(
@@ -32,7 +38,10 @@ async def on_ask_for_sale_temporary_code(
 @router.message(
     F.chat.type == ChatType.PRIVATE,
     invert_f(code_input_filter),
-    user_is_salesman_filter,
+    or_f(
+        user_is_salesman_filter,
+        user_is_admin_filter,
+    ),
     StateFilter(SaleTemporaryCodeStates.code),
 )
 async def on_sale_temporary_code_invalid_input(
@@ -44,7 +53,10 @@ async def on_sale_temporary_code_invalid_input(
 @router.message(
     F.chat.type == ChatType.PRIVATE,
     code_input_filter,
-    user_is_salesman_filter,
+    or_f(
+        user_is_salesman_filter,
+        user_is_admin_filter,
+    ),
     StateFilter(SaleTemporaryCodeStates.code),
 )
 async def on_sale_temporary_code_input(

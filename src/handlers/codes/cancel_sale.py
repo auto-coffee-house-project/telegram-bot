@@ -1,10 +1,10 @@
 from aiogram import Router
-from aiogram.filters import StateFilter, ExceptionTypeFilter
+from aiogram.filters import StateFilter, ExceptionTypeFilter, or_f
 from aiogram.types import CallbackQuery, ErrorEvent
 
 from callback_data import SaleDeleteCallbackData
 from exceptions import SaleDeletionTimeExpiredError
-from filters import user_is_salesman_filter
+from filters import user_is_salesman_filter, user_is_admin_filter
 from repositories import SaleRepository
 
 __all__ = ('router',)
@@ -27,7 +27,10 @@ async def on_sale_deletion_time_expired_error(event: ErrorEvent) -> None:
 
 @router.callback_query(
     SaleDeleteCallbackData.filter(),
-    user_is_salesman_filter,
+    or_f(
+        user_is_salesman_filter,
+        user_is_admin_filter,
+    ),
     StateFilter('*'),
 )
 async def on_cancel_sale(
