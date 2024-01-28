@@ -3,18 +3,24 @@ from uuid import UUID
 from aiogram import F, Bot, Router
 from aiogram.enums import ChatType
 from aiogram.filters import ExceptionTypeFilter, StateFilter
-from aiogram.types import ErrorEvent, Message
+from aiogram.types import ErrorEvent, Message, CallbackQuery
 
 from exceptions import (
     AdminDoesNotExistError,
     InvitationExpiredError,
     InvitationDoesNotExistError,
+    SalesmanAlreadyExistsError,
 )
 from filters import invitation_deeplink_filter, user_is_admin_filter
 from repositories import InvitationRepository, SalesmanRepository
-from views import SalesmanCreatedView, answer_view, InvitationView
+from views import SalesmanCreatedView, answer_view, InvitationView, edit_view
 
 router = Router(name=__name__)
+
+
+@router.error(ExceptionTypeFilter(SalesmanAlreadyExistsError))
+async def on_salesman_already_exists_error(event: ErrorEvent) -> None:
+    await event.update.message.answer(f'❌ Вы уже являетесь продавцом')
 
 
 @router.error(ExceptionTypeFilter(InvitationExpiredError))
@@ -45,21 +51,25 @@ async def on_accept_invitation(
     await answer_view(message, view)
 
 
-@router.message(
-    F.text == '🔗 Ссылка-приглашение',
+@router.callback_query(
+    F.data == 'add-salesman',
     user_is_admin_filter,
     StateFilter('*'),
 )
 async def on_create_invitation(
-        message: Message,
+        callback_query: CallbackQuery,
         bot: Bot,
         invitation_repository: InvitationRepository,
 ) -> None:
+    admin_user_id = callback_query.from_user.id
     try:
-        invitation = await invitation_repository.create(message.from_user.id)
+        invitation = await invitation_repository.create(admin_user_id)
     except AdminDoesNotExistError:
-        await message.reply('Вы не являетесь администратором')
+        await callback_query.answer(
+            text='Вы не являетесь администратором',
+            show_alert=True,
+        )
         return
     bot_user = await bot.get_me()
     view = InvitationView(bot_username=bot_user.username, invitation=invitation)
-    await answer_view(message, view)
+    await edit_view(callback_query.message, view)

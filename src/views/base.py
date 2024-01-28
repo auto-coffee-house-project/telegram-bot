@@ -14,6 +14,7 @@ __all__ = (
     'PhotoView',
     'answer_view',
     'answer_photo_view',
+    'edit_view',
 )
 
 ReplyMarkup: TypeAlias = (
@@ -61,5 +62,12 @@ async def answer_photo_view(message: Message, view: PhotoView) -> Message:
     return await message.answer_photo(
         photo=view.get_photo(),
         caption=view.get_caption(),
+        reply_markup=view.get_reply_markup(),
+    )
+
+
+async def edit_view(message: Message, view: TextView) -> Message:
+    return await message.edit_text(
+        text=view.get_text(),
         reply_markup=view.get_reply_markup(),
     )

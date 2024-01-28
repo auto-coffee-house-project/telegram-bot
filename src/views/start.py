@@ -16,12 +16,12 @@ class StartAdminView(TextView):
         resize_keyboard=True,
         keyboard=[
             [
-                KeyboardButton(text='🔗 Ссылка-приглашение'),
                 KeyboardButton(text='📨 Рассылка'),
+                KeyboardButton(text='👥 Продавцы'),
             ],
             [
                 KeyboardButton(text='📲 Ввести код вручную'),
-            ]
+            ],
         ],
     )
 
