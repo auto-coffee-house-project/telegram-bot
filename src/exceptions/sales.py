@@ -1,0 +1,2 @@
+class SaleDeletionTimeExpiredError(Exception):
+    pass
