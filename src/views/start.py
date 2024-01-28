@@ -17,9 +17,10 @@ class StartAdminView(TextView):
         keyboard=[
             [
                 KeyboardButton(text='🔗 Ссылка-приглашение'),
+                KeyboardButton(text='📨 Рассылка'),
             ],
             [
-                KeyboardButton(text='📨 Рассылка'),
+                KeyboardButton(text='📲 Ввести код вручную'),
             ]
         ],
     )
