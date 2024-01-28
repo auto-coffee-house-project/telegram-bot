@@ -1,5 +1,11 @@
-from exceptions import ServerAPIError, SalesmanDoesNotExistError
-from models import Salesman
+from uuid import UUID
+
+from exceptions import (
+    ServerAPIError,
+    InvitationExpiredError,
+    InvitationDoesNotExistError,
+)
+from models import SalesmanCreateResponse
 from parsers import parse_api_response
 from repositories.base import APIRepository
 
@@ -8,16 +14,29 @@ __all__ = ('SalesmanRepository',)
 
 class SalesmanRepository(APIRepository):
 
-    async def get_by_user_id(self, user_id: int) -> Salesman:
-        url = f'/shops/salesmans/{user_id}/'
-        response = await self._http_client.get(url)
+    async def create(
+            self,
+            *,
+            invitation_id: UUID,
+            user_id: int,
+    ) -> SalesmanCreateResponse:
+        url = '/shops/salesmans/'
+        request_data = {
+            'invitation_id': str(invitation_id),
+            'user_id': user_id,
+        }
+
+        response = await self._http_client.post(url, json=request_data)
 
         api_response = parse_api_response(response)
 
         if api_response.ok:
-            return Salesman.model_validate(api_response.result)
+            return SalesmanCreateResponse.model_validate(api_response.result)
 
-        if api_response.message == 'Does not exist':
-            raise SalesmanDoesNotExistError(salesman_user_id=user_id)
+        if api_response.message == 'Object does not exist':
+            raise InvitationDoesNotExistError
+
+        if api_response.message == 'Salesman invitation expired':
+            raise InvitationExpiredError
 
         raise ServerAPIError(response)
