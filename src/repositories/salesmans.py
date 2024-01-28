@@ -5,7 +5,7 @@ from exceptions import (
     InvitationExpiredError,
     InvitationDoesNotExistError,
 )
-from models import SalesmanCreateResponse
+from models import SalesmanCreateResponse, ShopSalesmans
 from parsers import parse_api_response
 from repositories.base import APIRepository
 
@@ -13,6 +13,19 @@ __all__ = ('SalesmanRepository',)
 
 
 class SalesmanRepository(APIRepository):
+
+    async def get_all(self, admin_user_id: int) -> ShopSalesmans:
+        url = '/shops/salesmans/'
+        request_query_params = {'admin_user_id': admin_user_id}
+
+        response = await self._http_client.get(url, params=request_query_params)
+
+        api_response = parse_api_response(response)
+
+        if api_response.ok:
+            return ShopSalesmans.model_validate(api_response.result)
+
+        raise ServerAPIError(response)
 
     async def create(
             self,
