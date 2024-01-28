@@ -1,6 +1,7 @@
 from aiogram.types import (
-    ReplyKeyboardMarkup, KeyboardButton,
-    ReplyKeyboardRemove
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardRemove,
 )
 
 from views import TextView
