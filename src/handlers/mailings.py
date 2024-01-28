@@ -1,37 +1,16 @@
-from aiogram import Router, F, Bot
+from aiogram import Router, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
-from exceptions import AdminDoesNotExistError
 from filters import user_is_admin_filter
-from repositories import InvitationRepository, MailingRepository
+from repositories import MailingRepository
 from states import ShopMailingStates
-from views import answer_view, MailingConfirmView, InvitationView
+from views import MailingConfirmView, answer_view
 
 __all__ = ('router',)
 
 router = Router(name=__name__)
-
-
-@router.message(
-    F.text == '🔗 Ссылка-приглашение',
-    user_is_admin_filter,
-    StateFilter('*'),
-)
-async def on_create_invitation(
-        message: Message,
-        bot: Bot,
-        invitation_repository: InvitationRepository,
-) -> None:
-    try:
-        invitation = await invitation_repository.create(message.from_user.id)
-    except AdminDoesNotExistError:
-        await message.reply('Вы не являетесь администратором')
-        return
-    bot_user = await bot.get_me()
-    view = InvitationView(bot_username=bot_user.username, invitation=invitation)
-    await answer_view(message, view)
 
 
 @router.message(

@@ -1,1 +1,1 @@
-from . import start, codes, errors, admins, invitations
+from . import start, codes, errors, mailings, invitations

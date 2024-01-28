@@ -35,7 +35,7 @@ def register_routers(dispatcher: Dispatcher) -> None:
         handlers.codes.router,
         handlers.invitations.router,
         handlers.start.router,
-        handlers.admins.router,
+        handlers.mailings.router,
         handlers.errors.router,
     )
 
