@@ -33,9 +33,9 @@ from repositories.sales import SaleRepository
 def register_routers(dispatcher: Dispatcher) -> None:
     dispatcher.include_routers(
         handlers.invitations.router,
-        handlers.start.router,
         handlers.salesmans.router,
         handlers.codes.router,
+        handlers.start.router,
         handlers.mailings.router,
         handlers.errors.router,
     )
