@@ -40,17 +40,18 @@ class SaleTemporaryCodeSuccessfullyAppliedView(TextView):
 
 class CodeSuccessfullyAppliedNotificationForClientView(TextView):
 
-    def __init__(self, current_value: int, max_value: int):
-        self.__current_value = current_value
-        self.__max_value = max_value
+    def __init__(self, sale: Sale):
+        self.__sale = sale
 
     def get_text(self) -> str:
-        left_value = self.__max_value - self.__current_value
-        if left_value == 1:
+        if self.__sale.is_free:
             return (
                 '✅ Код успешно применен!\n'
                 '🎉 Вы получили бесплатную чашку кофе!'
             )
+        left_value = (
+                self.__sale.each_nth_cup_free - self.__sale.current_cups_count
+        )
         return (
             '✅ Код успешно применен!\n'
             '🔥 Для получения бесплатного кофе'

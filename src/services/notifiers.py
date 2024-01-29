@@ -13,10 +13,7 @@ async def send_code_applied_notification(
         bot: Bot,
         sale: Sale,
 ) -> None:
-    view = CodeSuccessfullyAppliedNotificationForClientView(
-        current_value=sale.current_cups_count,
-        max_value=sale.each_nth_cup_free,
-    )
+    view = CodeSuccessfullyAppliedNotificationForClientView(sale)
     with contextlib.suppress(TelegramAPIError):
         await bot.send_message(
             chat_id=sale.client_user_id,
