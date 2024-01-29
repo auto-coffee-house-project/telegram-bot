@@ -1,9 +1,13 @@
+from pydantic import TypeAdapter
+
 from exceptions import (
-    ServerAPIError, SalesmanDoesNotExistError,
-    SalesmanAndSaleCodeShopGroupsNotEqualError, SaleDeletionTimeExpiredError
+    ServerAPIError,
+    SalesmanDoesNotExistError,
+    SalesmanAndSaleCodeShopGroupsNotEqualError,
+    SaleDeletionTimeExpiredError,
 )
 from exceptions.codes import CodeDoesNotExistError, CodeExpiredError
-from models import Sale
+from models import Sale, ClientPurchasesStatistics
 from parsers import parse_api_response
 from repositories.base import APIRepository
 
@@ -55,5 +59,22 @@ class SaleRepository(APIRepository):
 
         if api_response.message == 'Sale deletion time expired':
             raise SaleDeletionTimeExpiredError
+
+        raise ServerAPIError(response)
+
+    async def get_statistics(
+            self,
+            *,
+            bot_id: int,
+    ) -> list[ClientPurchasesStatistics]:
+        url = f'/shops/clients/all-statistics/'
+        request_query_params = {'bot_id': bot_id}
+        response = await self._http_client.get(url, params=request_query_params)
+
+        api_response = parse_api_response(response)
+
+        if api_response.ok:
+            type_adapter = TypeAdapter(list[ClientPurchasesStatistics])
+            return type_adapter.validate_python(api_response.result)
 
         raise ServerAPIError(response)

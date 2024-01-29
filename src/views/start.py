@@ -22,6 +22,9 @@ class StartAdminView(TextView):
             [
                 KeyboardButton(text='📲 Ввести код вручную'),
             ],
+            [
+                KeyboardButton(text='📊 Статистика по клиентам'),
+            ],
         ],
     )
 
