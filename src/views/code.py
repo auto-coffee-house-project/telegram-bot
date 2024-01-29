@@ -4,7 +4,10 @@ from callback_data import SaleDeleteCallbackData
 from models import Sale
 from views import TextView
 
-__all__ = ('SaleTemporaryCodeSuccessfullyAppliedView',)
+__all__ = (
+    'SaleTemporaryCodeSuccessfullyAppliedView',
+    'CodeSuccessfullyAppliedNotificationForClientView',
+)
 
 
 class SaleTemporaryCodeSuccessfullyAppliedView(TextView):
@@ -32,4 +35,24 @@ class SaleTemporaryCodeSuccessfullyAppliedView(TextView):
                     ),
                 ],
             ],
+        )
+
+
+class CodeSuccessfullyAppliedNotificationForClientView(TextView):
+
+    def __init__(self, current_value: int, max_value: int):
+        self.__current_value = current_value
+        self.__max_value = max_value
+
+    def get_text(self) -> str:
+        left_value = self.__max_value - self.__current_value
+        if left_value == 0:
+            return (
+                '✅ Код успешно применен!\n'
+                '🎉 Вы получили бесплатную чашку кофе!'
+            )
+        return (
+            '✅ Код успешно применен!\n'
+            '🔥 Для получения бесплатного кофе'
+            f' осталось совершить ещё {left_value} покупок'
         )
