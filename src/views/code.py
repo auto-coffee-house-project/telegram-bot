@@ -45,12 +45,12 @@ class CodeSuccessfullyAppliedNotificationForClientView(TextView):
         self.__max_value = max_value
 
     def get_text(self) -> str:
-        left_value = self.__max_value - self.__current_value
-        if left_value == 0:
+        if self.__max_value == self.__current_value:
             return (
                 '✅ Код успешно применен!\n'
                 '🎉 Вы получили бесплатную чашку кофе!'
             )
+        left_value = self.__max_value - self.__current_value
         return (
             '✅ Код успешно применен!\n'
             '🔥 Для получения бесплатного кофе'
