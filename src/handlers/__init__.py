@@ -6,4 +6,5 @@ from . import (
     invitations,
     salesmans,
     clients_statistics,
+    support,
 )
