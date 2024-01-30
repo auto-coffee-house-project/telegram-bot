@@ -33,20 +33,11 @@ class StartClientView(PhotoView):
     photo = 'https://i.imgur.com/OW5KCUN.jpg'
     reply_markup = ReplyKeyboardRemove()
 
-    def __init__(self, each_nth_cup_free: int):
-        self.__each_nth_cup_free = each_nth_cup_free
+    def __init__(self, start_text: str):
+        self.__start_text = start_text
 
     def get_caption(self) -> str:
-        return (
-            'Привет!'
-            ' ☺️ Мы рады что ты с нами и в благодарность мы готовы дарить тебе'
-            f' каждый {self.__each_nth_cup_free}-й кофе бесплатно!'
-            '\n'
-            'Мы будем стараться, делать наш сервис все лучше и лучше,'
-            ' чтобы тебе хотелось возвращаться к нам.'
-            ' А сейчас нажми кнопку меню'
-            ' чтобы отметить свою первую покупку кофе! ☕️'
-        )
+        return self.__start_text
 
 
 class StartSalesmanView(TextView):

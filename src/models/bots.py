@@ -10,4 +10,5 @@ class Bot(BaseModel):
     name: str
     token: str
     username: str
+    start_text: str
     created_at: datetime
