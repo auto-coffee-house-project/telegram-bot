@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router, F, Bot
 from aiogram.enums import ChatType
 from aiogram.filters import StateFilter, invert_f, or_f
 from aiogram.fsm.context import FSMContext
@@ -10,6 +10,7 @@ from filters import (
 )
 from models import User
 from repositories import SaleRepository
+from services.notifiers import send_code_applied_notification
 from states import SaleTemporaryCodeStates
 from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
 
@@ -65,6 +66,7 @@ async def on_sale_temporary_code_input(
         sale_repository: SaleRepository,
         code: str,
         user: User,
+        bot: Bot,
 ) -> None:
     await state.clear()
     sale = await sale_repository.create(
@@ -73,3 +75,7 @@ async def on_sale_temporary_code_input(
     )
     view = SaleTemporaryCodeSuccessfullyAppliedView(sale)
     await answer_view(message, view)
+    await send_code_applied_notification(
+        bot=bot,
+        sale=sale,
+    )
