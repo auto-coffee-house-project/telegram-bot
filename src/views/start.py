@@ -24,6 +24,7 @@ class StartAdminView(TextView):
             ],
             [
                 KeyboardButton(text='📊 Статистика по клиентам'),
+                KeyboardButton(text='📞 Тех.поддержка'),
             ],
         ],
     )
