@@ -16,12 +16,16 @@ class ClientsStatisticsView(TextView):
             return '😔 Ваши клиенты пока не сделали ни одной покупки'
 
         lines: list[str] = [
-            '<b>ID клиента | Общее количество чашек | Бесплатные чашки</b>',
+            '<b>Имя клиента | Общее количество чашек | Бесплатные чашки</b>',
         ]
 
         for client_statistics in self.__clients_statistics:
+            name = (
+                    client_statistics.user.username
+                    or client_statistics.user.full_name
+            )
             lines.append(
-                f'{client_statistics.user_id}'
+                f'{name}'
                 f' | {client_statistics.total_purchases_count} шт.'
                 f' | {client_statistics.free_purchases_count} шт.'
             )
