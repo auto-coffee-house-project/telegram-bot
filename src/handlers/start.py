@@ -4,10 +4,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from filters import (
-    user_is_salesman_filter, user_is_admin_filter,
-    user_is_client_filter
+    user_is_salesman_filter,
+    user_is_admin_filter,
+    user_is_client_filter,
 )
-from repositories import ShopGroupRepository
+from repositories import BotRepository
 from views import (
     StartClientView,
     answer_photo_view,
@@ -58,9 +59,9 @@ async def on_start_client(
         message: Message,
         state: FSMContext,
         bot: Bot,
-        shop_group_repository: ShopGroupRepository,
+        bot_repository: BotRepository,
 ) -> None:
-    shop_group = await shop_group_repository.get_by_bot_id(bot.id)
-    view = StartClientView(shop_group.each_nth_cup_free)
+    bot = await bot_repository.get_by_id(bot.id)
+    view = StartClientView(start_text=bot.start_text)
     await answer_photo_view(message, view)
     await state.clear()
