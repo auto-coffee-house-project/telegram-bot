@@ -59,3 +59,20 @@ async def on_mailing_confirm(
     )
     await callback_query.message.edit_text('📨 Рассылка создана')
     await state.clear()
+
+
+@router.callback_query(
+    F.data == 'mailing-cancel',
+    user_is_admin_filter,
+    StateFilter('*'),
+)
+async def on_mailing_cancel(
+        callback_query: CallbackQuery,
+        state: FSMContext,
+) -> None:
+    await callback_query.answer(
+        text='📨 Рассылка отменена',
+        show_alert=True,
+    )
+    await callback_query.message.delete()
+    await state.clear()

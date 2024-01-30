@@ -10,6 +10,12 @@ class MailingConfirmView(TextView):
         inline_keyboard=[
             [
                 InlineKeyboardButton(
+                    text='❌ Отменить',
+                    callback_data='mailing-cancel',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
                     text='✅ Начать',
                     callback_data='mailing-confirm',
                 ),
