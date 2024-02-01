@@ -69,7 +69,7 @@ async def on_sale_temporary_code_input(
         bot: Bot,
 ) -> None:
     await state.clear()
-    sale = await sale_repository.create(
+    sale = await sale_repository.create_by_code(
         code=code,
         salesman_user_id=user.id,
     )

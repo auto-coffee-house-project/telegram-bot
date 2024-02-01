@@ -31,7 +31,7 @@ async def on_scan_qr_code(
         sale_repository: SaleRepository,
         bot: Bot,
 ) -> None:
-    sale = await sale_repository.create(
+    sale = await sale_repository.create_by_code(
         code=code,
         salesman_user_id=message.from_user.id,
     )

@@ -16,8 +16,8 @@ __all__ = ('SaleRepository',)
 
 class SaleRepository(APIRepository):
 
-    async def create(self, code: str, salesman_user_id: int) -> Sale:
-        url = '/shops/sales/'
+    async def create_by_code(self, code: str, salesman_user_id: int) -> Sale:
+        url = '/shops/sales/by-codes/'
         request_data = {
             'code': code,
             'salesman_user_id': salesman_user_id,
