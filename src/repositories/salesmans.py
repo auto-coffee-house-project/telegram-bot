@@ -4,7 +4,9 @@ from exceptions import (
     ServerAPIError,
     InvitationExpiredError,
     InvitationDoesNotExistError,
-    SalesmanDoesNotExistError, SalesmanAlreadyExistsError,
+    SalesmanDoesNotExistError,
+    SalesmanAlreadyExistsError,
+    UserIsAlreadyAdminError,
 )
 from models import SalesmanCreateResponse, ShopSalesmans
 from parsers import parse_api_response
@@ -55,6 +57,9 @@ class SalesmanRepository(APIRepository):
 
         if api_response.message == 'User is already salesman':
             raise SalesmanAlreadyExistsError
+
+        if api_response.message == 'User is already shop admin':
+            raise UserIsAlreadyAdminError
 
         raise ServerAPIError(response)
 
