@@ -10,13 +10,14 @@ __all__ = ('UserRepository',)
 
 class UserRepository(APIRepository):
 
-    async def upsert_user(self, user: TelegramUser) -> User:
+    async def upsert_user(self, user: TelegramUser, bot_id: int) -> User:
         url = '/telegram/users/'
         request_data = {
             'id': user.id,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'username': user.username,
+            'bot_id': bot_id,
         }
         response = await self._http_client.post(url, json=request_data)
 
@@ -27,9 +28,16 @@ class UserRepository(APIRepository):
 
         raise ServerAPIError(response)
 
-    async def get_user_by_id(self, user_id: int) -> User:
-        url = f'/telegram/users/{user_id}/'
-        response = await self._http_client.get(url)
+    async def get_user_by_id(self, user_id: int, bot_id: int) -> User:
+        url = f'/telegram/users/'
+        request_query_params = {
+            'user_id': user_id,
+            'bot_id': bot_id,
+        }
+        response = await self._http_client.get(
+            url=url,
+            params=request_query_params,
+        )
 
         api_response = parse_api_response(response)
 
