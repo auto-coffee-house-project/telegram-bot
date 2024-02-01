@@ -10,12 +10,18 @@ from exceptions import (
     InvitationExpiredError,
     InvitationDoesNotExistError,
     SalesmanAlreadyExistsError,
+    UserIsAlreadyAdminError,
 )
 from filters import invitation_deeplink_filter, user_is_admin_filter
 from repositories import InvitationRepository, SalesmanRepository
 from views import SalesmanCreatedView, answer_view, InvitationView, edit_view
 
 router = Router(name=__name__)
+
+
+@router.error(ExceptionTypeFilter(UserIsAlreadyAdminError))
+async def on_user_is_already_admin_error(event: ErrorEvent) -> None:
+    await event.update.message.answer(f'❌ Вы уже являетесь администратором')
 
 
 @router.error(ExceptionTypeFilter(SalesmanAlreadyExistsError))
