@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from . import manual_input, deep_link, cancel_sale
+from . import manual_input, deep_link, delete
 
 __all__ = ('router',)
 
