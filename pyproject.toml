@@ -4,7 +4,7 @@ version = "1.0.0"
 description = ""
 authors = ["Eldos <eldos.baktybekov@gmail.com>"]
 readme = "README.md"
-packages = [{include = "coffee_house_telegram_bot"}]
+packages = [{ include = "coffee_house_telegram_bot" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -15,7 +15,13 @@ python-json-logger = "^2.0.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src",
+]
