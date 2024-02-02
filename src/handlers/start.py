@@ -9,12 +9,16 @@ from filters import (
     user_is_client_filter,
 )
 from repositories import BotRepository
+from services.qr_code import (
+    build_bonus_deeplink,
+    create_qr_code
+)
 from views import (
     StartClientView,
     answer_photo_view,
     StartSalesmanView,
     answer_view,
-    StartAdminView,
+    StartAdminView, QRCodeView,
 )
 
 __all__ = ('router',)
@@ -61,7 +65,19 @@ async def on_start_client(
         bot: Bot,
         bot_repository: BotRepository,
 ) -> None:
+    bot_user = await bot.get_me()
+
+    bonus_deeplink = build_bonus_deeplink(
+        bot_username=bot_user.username,
+        user_id=message.from_user.id,
+    )
+    qr_code_url = create_qr_code(bonus_deeplink)
+
+    view = QRCodeView(qr_code_url)
+    await answer_photo_view(message, view)
+
     bot = await bot_repository.get_by_id(bot.id)
     view = StartClientView(start_text=bot.start_text)
     await answer_photo_view(message, view)
+
     await state.clear()

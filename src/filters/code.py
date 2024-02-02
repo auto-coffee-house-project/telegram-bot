@@ -1,9 +1,29 @@
-from aiogram.types import Message
+from typing import Protocol
 
 __all__ = ('code_input_filter', 'code_deeplink_filter')
 
 
-def validate_code(code: str) -> bool | dict:
+class HasText(Protocol):
+    text: str
+
+
+def code_deeplink_filter(message: HasText) -> bool | dict:
+    if not message.text.startswith('/start scan-user_'):
+        return False
+
+    user_id = message.text.split('_')[-1]
+
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return False
+
+    return {'client_user_id': user_id}
+
+
+def code_input_filter(message: HasText) -> bool | dict:
+    code = message.text
+
     if len(code) != 4:
         return False
 
@@ -11,17 +31,3 @@ def validate_code(code: str) -> bool | dict:
         return False
 
     return {'code': code}
-
-
-def code_deeplink_filter(message: Message) -> bool | dict:
-    if not message.text.startswith('/start scan-'):
-        return False
-    try:
-        code = message.text.split('-')[1]
-    except IndexError:
-        return False
-    return validate_code(code)
-
-
-def code_input_filter(message: Message) -> bool | dict:
-    return validate_code(message.text)

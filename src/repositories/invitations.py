@@ -8,9 +8,9 @@ __all__ = ('InvitationRepository',)
 
 class InvitationRepository(APIRepository):
 
-    async def create(self, admin_user_id: int) -> Invitation:
+    async def create(self, admin_user_id: int, bot_id: int) -> Invitation:
         url = '/shops/invitations/'
-        request_data = {'admin_user_id': admin_user_id}
+        request_data = {'admin_user_id': admin_user_id, 'bot_id': bot_id}
         response = await self._http_client.post(url, json=request_data)
 
         api_response = parse_api_response(response)

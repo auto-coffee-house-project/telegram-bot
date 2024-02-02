@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router, F, Bot
 from aiogram.filters import StateFilter
 from aiogram.types import Message
 
@@ -18,8 +18,12 @@ router = Router(name=__name__)
 async def on_salesmans_list(
         message: Message,
         salesman_repository: SalesmanRepository,
+        bot: Bot,
 ) -> None:
     admin_user_id = message.from_user.id
-    shop_salesmans = await salesman_repository.get_all(admin_user_id)
+    shop_salesmans = await salesman_repository.get_all(
+        admin_user_id=admin_user_id,
+        bot_id=bot.id,
+    )
     view = SalesmanListView(shop_salesmans)
     await answer_view(message, view)

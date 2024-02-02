@@ -4,7 +4,7 @@ from exceptions import (
     ServerAPIError,
     SalesmanDoesNotExistError,
     SalesmanAndSaleCodeShopGroupsNotEqualError,
-    SaleDeletionTimeExpiredError,
+    SaleDeletionTimeExpiredError, UserIsNotShopClientError,
 )
 from exceptions.codes import CodeDoesNotExistError, CodeExpiredError
 from models import Sale, ClientPurchasesStatistics
@@ -16,8 +16,32 @@ __all__ = ('SaleRepository',)
 
 class SaleRepository(APIRepository):
 
-    async def create(self, code: str, salesman_user_id: int) -> Sale:
-        url = '/shops/sales/'
+    async def create_by_user_id(
+            self,
+            client_user_id: int,
+            salesman_user_id: int,
+            bot_id: int,
+    ) -> Sale:
+        url = '/shops/sales/by-users/'
+        request_data = {
+            'client_user_id': client_user_id,
+            'salesman_user_id': salesman_user_id,
+            'bot_id': bot_id,
+        }
+        response = await self._http_client.post(url, json=request_data)
+
+        api_response = parse_api_response(response)
+
+        if api_response.ok:
+            return Sale.model_validate(api_response.result)
+
+        if api_response.message == 'User is not shop client':
+            raise UserIsNotShopClientError
+
+        raise ServerAPIError(response)
+
+    async def create_by_code(self, code: str, salesman_user_id: int) -> Sale:
+        url = '/shops/sales/by-codes/'
         request_data = {
             'code': code,
             'salesman_user_id': salesman_user_id,
