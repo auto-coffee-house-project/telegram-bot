@@ -27,12 +27,12 @@ router = Router(name=__name__)
 )
 async def on_scan_qr_code(
         message: Message,
-        code: str,
+        client_user_id: int,
         sale_repository: SaleRepository,
         bot: Bot,
 ) -> None:
-    sale = await sale_repository.create_by_code(
-        code=code,
+    sale = await sale_repository.create_by_user_id(
+        client_user_id=client_user_id,
         salesman_user_id=message.from_user.id,
     )
     view = SaleTemporaryCodeSuccessfullyAppliedView(sale)
