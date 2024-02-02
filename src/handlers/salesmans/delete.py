@@ -1,4 +1,4 @@
-from aiogram import Router
+from aiogram import Router, Bot
 from aiogram.filters import StateFilter
 from aiogram.types import CallbackQuery
 
@@ -21,11 +21,16 @@ async def on_salesman_delete_callback_data(
         callback_query: CallbackQuery,
         callback_data: SalesmanDeleteCallbackData,
         salesman_repository: SalesmanRepository,
+        bot: Bot,
 ) -> None:
-    await salesman_repository.delete_by_user_id(callback_data.user_id)
+    await salesman_repository.delete_by_user_id(
+        user_id=callback_data.user_id,
+        bot_id=bot.id,
+    )
     await callback_query.answer('Продавец удален', show_alert=True)
     shop_salesmans = await salesman_repository.get_all(
         admin_user_id=callback_query.from_user.id,
+        bot_id=bot.id,
     )
     view = SalesmanListView(shop_salesmans)
     await edit_view(callback_query.message, view)

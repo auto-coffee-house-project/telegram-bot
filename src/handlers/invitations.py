@@ -69,7 +69,10 @@ async def on_create_invitation(
 ) -> None:
     admin_user_id = callback_query.from_user.id
     try:
-        invitation = await invitation_repository.create(admin_user_id)
+        invitation = await invitation_repository.create(
+            admin_user_id=admin_user_id,
+            bot_id=bot.id,
+        )
     except AdminDoesNotExistError:
         await callback_query.answer(
             text='Вы не являетесь администратором',

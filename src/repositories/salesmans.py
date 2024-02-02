@@ -17,9 +17,12 @@ __all__ = ('SalesmanRepository',)
 
 class SalesmanRepository(APIRepository):
 
-    async def get_all(self, admin_user_id: int) -> ShopSalesmans:
+    async def get_all(self, admin_user_id: int, bot_id: int) -> ShopSalesmans:
         url = '/shops/salesmans/'
-        request_query_params = {'admin_user_id': admin_user_id}
+        request_query_params = {
+            'admin_user_id': admin_user_id,
+            'bot_id': bot_id,
+        }
 
         response = await self._http_client.get(url, params=request_query_params)
 
@@ -63,10 +66,17 @@ class SalesmanRepository(APIRepository):
 
         raise ServerAPIError(response)
 
-    async def delete_by_user_id(self, user_id: int) -> None:
-        url = f'/shops/salesmans/{user_id}/'
+    async def delete_by_user_id(self, *, user_id: int, bot_id: int) -> None:
+        url = f'/shops/salesmans/'
+        request_query_params = {
+            'user_id': user_id,
+            'bot_id': bot_id,
+        }
 
-        response = await self._http_client.delete(url)
+        response = await self._http_client.delete(
+            url=url,
+            params=request_query_params,
+        )
 
         api_response = parse_api_response(response)
 

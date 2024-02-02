@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router, F, Bot
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
@@ -50,11 +50,13 @@ async def on_mailing_confirm(
         callback_query: CallbackQuery,
         state: FSMContext,
         mailing_repository: MailingRepository,
+        bot: Bot,
 ) -> None:
     state_data = await state.get_data()
     text: str = state_data['text']
     await mailing_repository.create(
         text=text,
+        bot_id=bot.id,
         admin_user_id=callback_query.from_user.id,
     )
     await callback_query.message.edit_text('📨 Рассылка создана')

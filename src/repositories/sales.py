@@ -4,7 +4,7 @@ from exceptions import (
     ServerAPIError,
     SalesmanDoesNotExistError,
     SalesmanAndSaleCodeShopGroupsNotEqualError,
-    SaleDeletionTimeExpiredError,
+    SaleDeletionTimeExpiredError, UserIsNotShopClientError,
 )
 from exceptions.codes import CodeDoesNotExistError, CodeExpiredError
 from models import Sale, ClientPurchasesStatistics
@@ -34,6 +34,9 @@ class SaleRepository(APIRepository):
 
         if api_response.ok:
             return Sale.model_validate(api_response.result)
+
+        if api_response.message == 'User is not shop client':
+            raise UserIsNotShopClientError
 
         raise ServerAPIError(response)
 
