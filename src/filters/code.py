@@ -8,10 +8,10 @@ class HasText(Protocol):
 
 
 def code_deeplink_filter(message: HasText) -> bool | dict:
-    if not message.text.startswith('/start scan-user:'):
+    if not message.text.startswith('/start scan-user_'):
         return False
 
-    user_id = message.text.split(':')[-1]
+    user_id = message.text.split('_')[-1]
 
     try:
         user_id = int(user_id)

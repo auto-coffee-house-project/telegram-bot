@@ -8,7 +8,7 @@ def build_bonus_deeplink(
         bot_username: str,
         user_id: int,
 ) -> str:
-    return f'https://t.me/{bot_username}?start=scan-user:{user_id}'
+    return f'https://t.me/{bot_username}?start=scan-user_{user_id}'
 
 
 def create_qr_code(data: str) -> str:

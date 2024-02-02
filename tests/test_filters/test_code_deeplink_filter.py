@@ -13,10 +13,10 @@ class Message:
 @pytest.mark.parametrize(
     'deeplink',
     [
-        '/start scanuser:1234',
-        '/startscan-user:123',
-        '/start scan-user:',
-        '/start scan-user:abcd',
+        '/start scanuser_1234',
+        '/startscan-user_123',
+        '/start scan-user_',
+        '/start scan-user_abcd',
     ],
 )
 def test_deeplink_invalid_structure(deeplink: str) -> None:
@@ -26,9 +26,9 @@ def test_deeplink_invalid_structure(deeplink: str) -> None:
 @pytest.mark.parametrize(
     'deeplink, expected_code',
     [
-        ('/start scan-user:54545454545', 54545454545),
-        ('/start scan-user:12345', 12345),
-        ('/start scan-user:-1234567', -1234567),
+        ('/start scan-user_54545454545', 54545454545),
+        ('/start scan-user_12345', 12345),
+        ('/start scan-user_-1234567', -1234567),
     ],
 )
 def test_deeplink_valid_structure(deeplink: str, expected_code: int) -> None:
