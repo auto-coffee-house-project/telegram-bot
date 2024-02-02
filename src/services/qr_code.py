@@ -13,7 +13,7 @@ def build_bonus_deeplink(
 
 def create_qr_code(data: str) -> str:
     query_params = {
-        'size': '450x450',
+        'size': '150x150',
         'data': data,
     }
     encoded_query_params = urllib.parse.urlencode(query_params)
