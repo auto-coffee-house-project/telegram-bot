@@ -9,5 +9,5 @@ router = Router(name=__name__)
 router.include_routers(
     deep_link.router,
     manual_input.router,
-    cancel_sale.router,
+    delete.router,
 )

@@ -32,7 +32,7 @@ def register_routers(dispatcher: Dispatcher) -> None:
     dispatcher.include_routers(
         handlers.invitations.router,
         handlers.salesmans.router,
-        handlers.codes.router,
+        handlers.sales.router,
         handlers.start.router,
         handlers.mailings.router,
         handlers.clients_statistics.router,
