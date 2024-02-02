@@ -20,11 +20,13 @@ class SaleRepository(APIRepository):
             self,
             client_user_id: int,
             salesman_user_id: int,
+            bot_id: int,
     ) -> Sale:
-        url = '/shops/sales/users/'
+        url = '/shops/sales/by-users/'
         request_data = {
             'client_user_id': client_user_id,
             'salesman_user_id': salesman_user_id,
+            'bot_id': bot_id,
         }
         response = await self._http_client.post(url, json=request_data)
 

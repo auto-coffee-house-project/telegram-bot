@@ -34,6 +34,7 @@ async def on_scan_qr_code(
     sale = await sale_repository.create_by_user_id(
         client_user_id=client_user_id,
         salesman_user_id=message.from_user.id,
+        bot_id=bot.id,
     )
     view = SaleTemporaryCodeSuccessfullyAppliedView(sale)
     await answer_view(message, view)
