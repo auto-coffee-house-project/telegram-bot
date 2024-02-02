@@ -1,6 +1,6 @@
 from . import (
     start,
-    codes,
+    sales,
     errors,
     mailings,
     invitations,
