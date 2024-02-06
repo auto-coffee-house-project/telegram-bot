@@ -15,6 +15,7 @@ def create_qr_code(data: str) -> str:
     query_params = {
         'size': '150x150',
         'data': data,
+        'margin': 16,
     }
     encoded_query_params = urllib.parse.urlencode(query_params)
     return (
