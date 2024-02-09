@@ -15,4 +15,4 @@ class APIRepository:
 def handle_common_errors(api_response: APIResponse) -> None:
     if api_response.message == 'Does not exist':
         if api_response.extra and 'bot_id' in api_response.extra:
-            raise BotDoesNotExistError
+            raise BotDoesNotExistError(api_response.extra['bot_id'])
