@@ -6,11 +6,19 @@ from exceptions import (
     ServerAPIError,
     ResponseJSONParseError,
     SalesmanDoesNotExistError,
-    SalesmanAndSaleCodeShopGroupsNotEqualError,
+    SalesmanAndSaleCodeShopGroupsNotEqualError, BotDoesNotExistError,
 )
 from exceptions.codes import CodeDoesNotExistError, CodeExpiredError
 
 router = Router(name=__name__)
+
+
+@router.error(ExceptionTypeFilter(BotDoesNotExistError))
+async def on_bot_does_not_exist_error(event: ErrorEvent) -> None:
+    if event.update.message is not None:
+        await event.update.message.reply('❌ Бот не найден. Скорее всего он ещё не привязан к конкретной кофейне')
+        return
+    raise event.exception
 
 
 @router.error(ExceptionTypeFilter(SalesmanAndSaleCodeShopGroupsNotEqualError))
