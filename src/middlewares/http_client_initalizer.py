@@ -3,7 +3,7 @@ from contextlib import AbstractAsyncContextManager
 from typing import TypeAlias
 
 import httpx
-from aiogram import BaseMiddleware
+from aiogram import BaseMiddleware, Bot
 from aiogram.types import Update
 
 from middlewares.common import Handler, ContextData, HandlerReturn
@@ -11,7 +11,7 @@ from middlewares.common import Handler, ContextData, HandlerReturn
 __all__ = ('HttpClientInitializerMiddleware',)
 
 HttpClientFactory: TypeAlias = (
-    Callable[[], AbstractAsyncContextManager[httpx.AsyncClient]]
+    Callable[..., AbstractAsyncContextManager[httpx.AsyncClient]]
 )
 
 
@@ -28,6 +28,12 @@ class HttpClientInitializerMiddleware(BaseMiddleware):
             event: Update,
             data: ContextData,
     ) -> HandlerReturn:
-        async with self.__closing_http_client_factory() as http_client:
+        bot: Bot = data['bot']
+        headers = {'bot-id': str(bot.id)}
+
+        async with self.__closing_http_client_factory(
+                headers=headers,
+        ) as http_client:
             data['http_client'] = http_client
+
             return await handler(event, data)

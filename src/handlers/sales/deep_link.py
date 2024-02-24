@@ -8,8 +8,7 @@ from filters import (
     user_is_admin_filter,
 )
 from repositories import SaleRepository
-from services.notifiers import send_code_applied_notification
-from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
+from views import SaleCodeSuccessfullyAppliedView, answer_view
 
 __all__ = ('router',)
 
@@ -29,19 +28,13 @@ async def on_scan_qr_code(
         message: Message,
         client_user_id: int,
         sale_repository: SaleRepository,
-        bot: Bot,
 ) -> None:
     sale = await sale_repository.create_by_user_id(
         client_user_id=client_user_id,
-        salesman_user_id=message.from_user.id,
-        bot_id=bot.id,
+        employee_user_id=message.from_user.id,
     )
-    view = SaleTemporaryCodeSuccessfullyAppliedView(sale)
+    view = SaleCodeSuccessfullyAppliedView(sale)
     await answer_view(message, view)
-    await send_code_applied_notification(
-        bot=bot,
-        sale=sale,
-    )
 
 
 @router.message(

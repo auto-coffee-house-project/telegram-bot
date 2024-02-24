@@ -62,13 +62,12 @@ async def on_start_admin(
 async def on_start_client(
         message: Message,
         state: FSMContext,
-        bot: Bot,
         bot_repository: BotRepository,
 ) -> None:
-    bot_user = await bot.get_me()
+    bot = await bot_repository.get_me()
 
     bonus_deeplink = build_bonus_deeplink(
-        bot_username=bot_user.username,
+        bot_username=bot.username,
         user_id=message.from_user.id,
     )
     qr_code_url = create_qr_code(bonus_deeplink)
@@ -76,7 +75,6 @@ async def on_start_client(
     view = QRCodeView(qr_code_url)
     await answer_photo_view(message, view)
 
-    bot = await bot_repository.get_by_id(bot.id)
     view = StartClientView(start_text=bot.start_text)
     await answer_photo_view(message, view)
 

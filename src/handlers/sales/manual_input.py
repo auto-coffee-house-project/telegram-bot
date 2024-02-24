@@ -11,8 +11,7 @@ from filters import (
 )
 from models import User
 from repositories import SaleRepository
-from services.notifiers import send_code_applied_notification
-from views import SaleTemporaryCodeSuccessfullyAppliedView, answer_view
+from views import SaleCodeSuccessfullyAppliedView, answer_view
 
 __all__ = ('router',)
 
@@ -52,11 +51,7 @@ async def on_sale_temporary_code_input(
     await state.clear()
     sale = await sale_repository.create_by_code(
         code=code,
-        salesman_user_id=user.id,
+        employee_user_id=user.id,
     )
-    view = SaleTemporaryCodeSuccessfullyAppliedView(sale)
+    view = SaleCodeSuccessfullyAppliedView(sale)
     await answer_view(message, view)
-    await send_code_applied_notification(
-        bot=bot,
-        sale=sale,
-    )

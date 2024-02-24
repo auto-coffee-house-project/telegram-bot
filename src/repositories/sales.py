@@ -1,13 +1,12 @@
 from pydantic import TypeAdapter
 
 from exceptions import (
-    ServerAPIError,
-    SalesmanDoesNotExistError,
+    ClientAlreadyHasGiftError, SaleDeletionTimeExpiredError,
     SalesmanAndSaleCodeShopGroupsNotEqualError,
-    SaleDeletionTimeExpiredError, UserIsNotShopClientError,
+    SalesmanDoesNotExistError, ServerAPIError, UserIsEmployeeError,
 )
 from exceptions.codes import CodeDoesNotExistError, CodeExpiredError
-from models import Sale, ClientPurchasesStatistics
+from models import ClientPurchasesStatistics, Sale
 from parsers import parse_api_response
 from repositories.base import APIRepository
 
@@ -18,16 +17,16 @@ class SaleRepository(APIRepository):
 
     async def create_by_user_id(
             self,
+            *,
             client_user_id: int,
-            salesman_user_id: int,
-            bot_id: int,
+            employee_user_id: int,
     ) -> Sale:
         url = '/shops/sales/by-users/'
         request_data = {
             'client_user_id': client_user_id,
-            'salesman_user_id': salesman_user_id,
-            'bot_id': bot_id,
+            'employee_user_id': employee_user_id,
         }
+
         response = await self._http_client.post(url, json=request_data)
 
         api_response = parse_api_response(response)
@@ -35,17 +34,26 @@ class SaleRepository(APIRepository):
         if api_response.ok:
             return Sale.model_validate(api_response.result)
 
-        if api_response.message == 'User is not shop client':
-            raise UserIsNotShopClientError
+        if api_response.message == 'Client already has gift':
+            raise ClientAlreadyHasGiftError
+
+        if api_response.message == 'User is employee':
+            raise UserIsEmployeeError
 
         raise ServerAPIError(response)
 
-    async def create_by_code(self, code: str, salesman_user_id: int) -> Sale:
+    async def create_by_code(
+            self,
+            *,
+            code: str,
+            employee_user_id: int,
+    ) -> Sale:
         url = '/shops/sales/by-codes/'
         request_data = {
             'code': code,
-            'salesman_user_id': salesman_user_id,
+            'employee_user_id': employee_user_id,
         }
+
         response = await self._http_client.post(url, json=request_data)
 
         api_response = parse_api_response(response)
@@ -54,6 +62,9 @@ class SaleRepository(APIRepository):
             return Sale.model_validate(api_response.result)
 
         error_message = api_response.message
+
+        if error_message == 'User is employee':
+            raise UserIsEmployeeError
 
         if error_message == 'Does not exist':
             if 'code' in api_response.extra:
@@ -66,7 +77,7 @@ class SaleRepository(APIRepository):
 
         if error_message == 'Salesman and sale code shop groups not equal':
             raise SalesmanAndSaleCodeShopGroupsNotEqualError(
-                salesman_user_id=salesman_user_id,
+                salesman_user_id=employee_user_id,
                 code=code,
             )
 
@@ -83,22 +94,5 @@ class SaleRepository(APIRepository):
 
         if api_response.message == 'Sale deletion time expired':
             raise SaleDeletionTimeExpiredError
-
-        raise ServerAPIError(response)
-
-    async def get_statistics(
-            self,
-            *,
-            bot_id: int,
-    ) -> list[ClientPurchasesStatistics]:
-        url = f'/shops/clients/all-statistics/'
-        request_query_params = {'bot_id': bot_id}
-        response = await self._http_client.get(url, params=request_query_params)
-
-        api_response = parse_api_response(response)
-
-        if api_response.ok:
-            type_adapter = TypeAdapter(list[ClientPurchasesStatistics])
-            return type_adapter.validate_python(api_response.result)
 
         raise ServerAPIError(response)

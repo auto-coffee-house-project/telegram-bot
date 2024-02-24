@@ -11,19 +11,17 @@ __all__ = ('StartClientView', 'StartSalesmanView', 'StartAdminView')
 
 
 class StartAdminView(TextView):
-    text = 'Привет ✋'
+    text = (
+        'Привет! Ты можешь ввести код вручную'
+        ' или отсканировать QR-код через камеру'
+    )
     reply_markup = ReplyKeyboardMarkup(
         resize_keyboard=True,
         keyboard=[
             [
-                KeyboardButton(text='📨 Рассылка'),
-                KeyboardButton(text='👥 Продавцы'),
-            ],
-            [
                 KeyboardButton(text='📲 Ввести код вручную'),
             ],
             [
-                KeyboardButton(text='📊 Статистика по клиентам'),
                 KeyboardButton(text='📞 Тех.поддержка'),
             ],
         ],
