@@ -3,7 +3,7 @@ from aiogram.types import User as TelegramUser
 from exceptions import ServerAPIError
 from models import User
 from parsers import parse_api_response
-from repositories.base import APIRepository
+from repositories.base import APIRepository, handle_common_errors
 
 __all__ = ('UserRepository',)
 
@@ -25,5 +25,7 @@ class UserRepository(APIRepository):
 
         if api_response.ok:
             return User.model_validate(api_response.result)
+
+        handle_common_errors(api_response)
 
         raise ServerAPIError(response)
