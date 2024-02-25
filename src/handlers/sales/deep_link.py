@@ -33,8 +33,6 @@ async def on_scan_qr_code(
         client_user_id=client_user_id,
         employee_user_id=message.from_user.id,
     )
-    view = SaleCodeSuccessfullyAppliedView(sale)
-    await answer_view(message, view)
 
 
 @router.message(

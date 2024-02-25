@@ -49,9 +49,7 @@ async def on_sale_temporary_code_input(
         bot: Bot,
 ) -> None:
     await state.clear()
-    sale = await sale_repository.create_by_code(
+    await sale_repository.create_by_code(
         code=code,
         employee_user_id=user.id,
     )
-    view = SaleCodeSuccessfullyAppliedView(sale)
-    await answer_view(message, view)
