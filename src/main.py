@@ -22,6 +22,7 @@ from repositories import (
     BotRepository,
     UserRepository,
     EmployeeRepository,
+    GiftRepository,
 )
 from repositories.sales import SaleRepository
 
@@ -86,6 +87,7 @@ async def main() -> None:
             sale_repository=SaleRepository,
             salesman_repository=EmployeeRepository,
             user_repository=UserRepository,
+            gift_repository=GiftRepository,
         ),
     )
     dispatcher.update.outer_middleware(user_middleware)
