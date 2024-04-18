@@ -8,7 +8,6 @@ __all__ = ('parse_api_response',)
 
 
 def parse_api_response(response: httpx.Response) -> APIResponse:
-    print(response.request.url)
     try:
         return APIResponse.model_validate_json(response.text)
     except ValidationError:

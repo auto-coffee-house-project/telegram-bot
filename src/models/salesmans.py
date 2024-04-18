@@ -19,7 +19,6 @@ class Salesman(BaseModel):
 
 class SalesmanCreateResponse(BaseModel):
     shop_name: str
-    shop_group_name: str
 
 
 class ShopSalesmans(SalesmanCreateResponse):

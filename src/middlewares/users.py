@@ -11,12 +11,9 @@ async def user_middleware(
         data: ContextData,
 ) -> HandlerReturn:
     message_or_callback_query = event.message or event.callback_query
+    from_user = message_or_callback_query.from_user
     if message_or_callback_query is not None:
         user_repository: UserRepository = data['user_repository']
-        bot: Bot = data['bot']
-        user = await user_repository.upsert_user(
-            user=message_or_callback_query.from_user,
-            bot_id=bot.id,
-        )
+        user = await user_repository.upsert_user(user=from_user)
         data['user'] = user
     return await handler(event, data)

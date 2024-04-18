@@ -2,5 +2,9 @@ class SaleDeletionTimeExpiredError(Exception):
     pass
 
 
-class UserIsNotShopClientError(Exception):
+class UserIsEmployeeError(Exception):
+    pass
+
+
+class ClientAlreadyHasGiftError(Exception):
     pass

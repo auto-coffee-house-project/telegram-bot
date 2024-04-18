@@ -21,9 +21,8 @@ from middlewares import (
 from repositories import (
     BotRepository,
     UserRepository,
-    SalesmanRepository,
-    InvitationRepository,
-    MailingRepository,
+    EmployeeRepository,
+    GiftRepository,
 )
 from repositories.sales import SaleRepository
 
@@ -31,11 +30,8 @@ from repositories.sales import SaleRepository
 def register_routers(dispatcher: Dispatcher) -> None:
     dispatcher.include_routers(
         handlers.invitations.router,
-        handlers.salesmans.router,
         handlers.sales.router,
         handlers.start.router,
-        handlers.mailings.router,
-        handlers.clients_statistics.router,
         handlers.support.router,
         handlers.errors.router,
     )
@@ -62,7 +58,6 @@ async def main() -> None:
     config = load_config_from_file(config_file_path)
 
     logging_config_file_path = root_path / 'logging_config.json'
-    setup_config(logging_config_file_path)
 
     dispatcher = Dispatcher(storage=MemoryStorage())
 
@@ -90,10 +85,9 @@ async def main() -> None:
         APIRepositoriesInitializerMiddleware(
             bot_repository=BotRepository,
             sale_repository=SaleRepository,
-            salesman_repository=SalesmanRepository,
+            salesman_repository=EmployeeRepository,
             user_repository=UserRepository,
-            invitation_repository=InvitationRepository,
-            mailing_repository=MailingRepository,
+            gift_repository=GiftRepository,
         ),
     )
     dispatcher.update.outer_middleware(user_middleware)

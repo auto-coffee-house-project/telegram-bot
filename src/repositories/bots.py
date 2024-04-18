@@ -1,6 +1,6 @@
 from pydantic import TypeAdapter
 
-from exceptions import ServerAPIError, BotDoesNotExistError
+from exceptions import BotDoesNotExistError, ServerAPIError
 from models import Bot
 from parsers import parse_api_response
 from repositories.base import APIRepository
@@ -22,8 +22,9 @@ class BotRepository(APIRepository):
 
         raise ServerAPIError(response)
 
-    async def get_by_id(self, bot_id: int) -> Bot:
-        url = f'/telegram/bots/{bot_id}/'
+    async def get_me(self) -> Bot:
+        url = f'/telegram/bots/me/'
+
         response = await self._http_client.get(url)
 
         api_response = parse_api_response(response)
@@ -32,6 +33,6 @@ class BotRepository(APIRepository):
             return Bot.model_validate(api_response.result)
 
         if api_response.message == 'Does not exist':
-            raise BotDoesNotExistError(bot_id)
+            raise BotDoesNotExistError
 
         raise ServerAPIError(response)
